@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Karnataka Vehicle Number Validation</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; padding: 2rem; background:#f7f7fb; color:#111; }
+    .card { background:white; padding:1.5rem; border-radius:12px; box-shadow:0 6px 18px rgba(20,20,40,0.06); max-width:520px; margin:auto; }
+    label { display:block; margin-bottom:0.4rem; font-weight:600; }
+    input { width:100%; padding:0.6rem 0.75rem; font-size:1rem; border:1px solid #d6d6df; border-radius:8px; }
+    .hint { font-size:0.9rem; color:#555; margin-top:0.5rem; }
+    .error { color:#b00020; margin-top:0.6rem; font-weight:600; }
+    .success { color: #0b6b28; margin-top:0.6rem; font-weight:600; }
+    button { margin-top:1rem; padding:0.6rem 0.9rem; border-radius:8px; border:0; background:#2563eb; color:white; font-weight:600; cursor:pointer; }
+    small.example { display:block; margin-top:0.6rem; color:#444; }
+  </style>
+</head>
+<body>
+  <div class="card" role="region" aria-labelledby="title">
+    <h2 id="title">Karnataka Vehicle Number — Validate</h2>
+
+    <form id="vehForm" novalidate>
+      <label for="veh">Vehicle Registration Number</label>
+
+      <!-- pattern provides a quick browser-level check (expects uppercase KA) -->
+      <input id="veh"
+             name="vehicle"
+             type="text"
+             inputmode="latin"
+             autocomplete="off"
+             placeholder="e.g. KA 01 AB 1234 or KA01AB1234"
+             aria-describedby="hint"
+             maxlength="20"
+             required
+             pattern="^KA[-\s]?\d{2}[-\s]?[A-Z]{1,2}[-\s]?\d{4}$" />
+
+      <div id="hint" class="hint">
+        Accepts formats like <strong>KA01AB1234</strong>, <strong>KA 01 AB 1234</strong>, or <strong>KA-01-AB-1234</strong>.
+      </div>
+
+      <div id="message" role="status" aria-live="polite"></div>
+
+      <button type="submit">Validate</button>
+
+      <small class="example">Valid examples: KA01AB1234, KA 05 A 0001, KA-03-AA-9999</small>
+    </form>
+  </div>
+
+  <script>
+    (function () {
+      // Regex (case-insensitive) used by JS validation:
+      const regex = /^KA[-\s]?\d{2}[-\s]?[A-Z]{1,2}[-\s]?\d{4}$/i;
+
+      const form = document.getElementById('vehForm');
+      const input = document.getElementById('veh');
+      const message = document.getElementById('message');
+
+      // Helper: show messages
+      function showError(text) {
+        message.innerHTML = '<div class="error">' + text + '</div>';
+      }
+      function showSuccess(text) {
+        message.innerHTML = '<div class="success">' + text + '</div>';
+      }
+      function clearMessage() {
+        message.innerHTML = '';
+      }
+
+      // Auto-uppercase as user types (keeps caret at end)
+      input.addEventListener('input', (e) => {
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+        input.value = input.value.toUpperCase();
+        // restore caret (best-effort)
+        input.setSelectionRange(start, end);
+        clearMessage();
+      });
+
+      // On blur, optionally trim extra spaces
+      input.addEventListener('blur', () => {
+        input.value = input.value.trim().replace(/\s+/g, ' ');
+      });
+
+      // Validate on submit
+      form.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+
+        const value = input.value.trim();
+
+        if (!value) {
+          showError('Please enter a vehicle number.');
+          input.focus();
+          return;
+        }
+
+        // JS regex (case-insensitive)
+        if (!regex.test(value)) {
+          // provide friendly guidance
+          showError('Invalid Karnataka vehicle format. Example valid: KA 01 AB 1234');
+          input.focus();
+          return;
+        }
+
+        showSuccess('Valid Karnataka vehicle number ✅ — ' + value.toUpperCase());
+        // At this point you can submit to server via fetch/ajax if required.
+      });
+
+      // Optional: live validation while typing (uncomment if desired)
+      // input.addEventListener('keyup', () => {
+      //   const v = input.value.trim();
+      //   if (!v) { clearMessage(); return; }
+      //   if (regex.test(v)) showSuccess('Looks valid so far.');
+      //   else showError('Not valid — expected format: KA 01 AB 1234');
+      // });
+
+    })();
+  </script>
+</body>
+</html>
