@@ -1,0 +1,13 @@
+.abc{
+    background-color: green;
+}
+#xyz{
+    background-color: red;
+}
+h1{
+    background-color: aqua;
+}
+#gt,.mahesh,h5{
+    background-color: pink;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
