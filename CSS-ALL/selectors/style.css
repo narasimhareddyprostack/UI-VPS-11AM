@@ -1,0 +1,13 @@
+a{
+    background-color: red;
+}
+#shruthika{
+    background-color: yellow;
+}
+a[target]{
+    background-color: yellow;
+}
+*{
+    background-color: pink;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
